@@ -1,10 +1,14 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class SuccessDialog extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+
+class WarningDialog extends StatelessWidget {
   final String msg;
   final VoidCallback handleClick;
 
-  SuccessDialog({required this.msg, required this.handleClick});
+  WarningDialog({required this.msg, required this.handleClick});
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +40,9 @@ class SuccessDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Sukses",
+              "Gagal",
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.teal),
+                  fontSize: 24, fontWeight: FontWeight.w700, color: Colors.red),
             ),
             SizedBox(
               height: 16,
