@@ -53,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
         decoration: InputDecoration(labelText: label),
         keyboardType: TextInputType.text,
         controller: controller,
-        validator: (value) => (value != null && value.length < 3
+        validator: (value) => (value!.isEmpty && value.length < 3
             ? "Nama harus diisi minimal 3 karakter"
             : null));
   }
@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.text,
         controller: controller,
         validator: (value) {
-          if (value != null) {
+          if (value!.isEmpty) {
             return "Email tidak boleh kosong";
           }
           final bool regex = RegExp(
@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         controller: controller,
-        validator: (value) => (value != null && value.length < 6
+        validator: (value) => (value!.isEmpty && value.length < 6
             ? "Password harus diisi minimal 6 karakter"
             : null));
   }
@@ -94,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         validator: (value) {
-          if (value != null && value.length < 6) {
+          if (value!.isEmpty && value.length < 6) {
             return "Password harus diisi minimal 6 karakter";
           }
           if (value != validator.text) {

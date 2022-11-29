@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Model/Produk.dart';
 
-class ProdukForm extends StatefulWidget {
-  Produk produk;
-  ProdukForm({required this.produk});
-
+class ProdukFormCreate extends StatefulWidget {
   @override
-  State<ProdukForm> createState() => _ProdukFormState();
+  State<ProdukFormCreate> createState() => _ProdukFormCreateState();
 }
 
-class _ProdukFormState extends State<ProdukForm> {
+class _ProdukFormCreateState extends State<ProdukFormCreate> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String judul = "Tambah Produk";
@@ -18,24 +15,6 @@ class _ProdukFormState extends State<ProdukForm> {
   final _kodeProdukController = TextEditingController();
   final _namaProdukController = TextEditingController();
   final _hargaProdukController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    isUpdate();
-  }
-
-  isUpdate() {
-    if (widget.produk != null) {
-      setState(() {
-        judul = "Ubah Produk";
-        btnSubmit = "Edit";
-        _kodeProdukController.text = widget.produk.kodeProduk;
-        _namaProdukController.text = widget.produk.namaProduk;
-        _hargaProdukController.text = widget.produk.harga.toString();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +46,7 @@ class _ProdukFormState extends State<ProdukForm> {
       decoration: InputDecoration(labelText: label),
       keyboardType: TextInputType.text,
       controller: controller,
-      validator: (value) => value != null ? pesan : null,
+      validator: (value) => value!.isEmpty ? pesan : null,
     );
   }
 
@@ -76,7 +55,7 @@ class _ProdukFormState extends State<ProdukForm> {
       decoration: InputDecoration(labelText: label),
       keyboardType: TextInputType.number,
       controller: controller,
-      validator: (value) => value != null ? pesan : null,
+      validator: (value) => value!.isEmpty ? pesan : null,
     );
   }
 

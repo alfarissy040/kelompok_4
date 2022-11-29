@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Ui/ProdukDetail.dart';
-import 'package:kelompok_4/Ui/ProdukForm.dart';
+import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
 
 import '../Model/Produk.dart';
 
@@ -21,8 +21,10 @@ class _ProdukPageState extends State<ProdukPage> {
             child: GestureDetector(
               child: const Icon(Icons.add, size: 26),
               onTap: () async {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProdukForm()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProdukFormCreate()));
               },
             ),
           ),

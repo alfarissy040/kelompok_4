@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:kelompok_4/Ui/ProdukForm.dart';
+import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
+import 'package:kelompok_4/Ui/ProdukFormEdit.dart';
 
 import '../Model/Produk.dart';
 
@@ -34,7 +35,10 @@ class _ProdukDetailState extends State<ProdukDetail> {
             "Harga : Rp. ${widget.produk.harga}",
             style: TextStyle(fontSize: 18),
           ),
-          BtnAction(),
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+            child: BtnAction(),
+          )
         ]),
       ),
     );
@@ -44,30 +48,31 @@ class _ProdukDetailState extends State<ProdukDetail> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          color: Colors.blue,
-          child: ElevatedButton(
-            child: Text("Edit"),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => ProdukForm(produk: widget.produk)));
-            },
-          ),
+        ElevatedButton(
+          child: Text("Edit"),
+          style: ElevatedButton.styleFrom(primary: Colors.blue),
+          onPressed: () {
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) =>
+                        ProdukFormEdit(produk: widget.produk)));
+          },
         ),
-        Container(
-          color: Colors.red,
-          child: ElevatedButton(
-              child: Text("Edit"), onPressed: () => confirmHapus()),
+        SizedBox(
+          width: 12,
         ),
+        ElevatedButton(
+            child: Text("Delete"),
+            style: ElevatedButton.styleFrom(primary: Colors.red),
+            onPressed: () => confirmHapus()),
       ],
     );
   }
 }
 
 void confirmHapus() {
-  AlertDialog alertDialog = AlertDialog(
+  AlertDialog alertDialog = new AlertDialog(
     content: Text("Yakin ingin menghapus data ini?"),
     actions: [
       Container(
