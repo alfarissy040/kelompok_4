@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kelompok_4/Bloc/LoginBloc.dart';
+import 'package:kelompok_4/Components/WarningDialog.dart';
+import 'package:kelompok_4/Helpers/UserInfo.dart';
+import 'package:kelompok_4/Ui/ProdukPage.dart';
 import 'package:kelompok_4/Ui/RegistrasiPage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           MenuNavigate("Register"),
                           Spacer(),
-                          BtnElevated("Login", _formKey),
+                          BtnElevated("Login"),
                         ],
                       ),
                     ),
@@ -80,11 +84,14 @@ class _LoginPageState extends State<LoginPage> {
             : null));
   }
 
-  Widget BtnElevated(String label, state) {
+  Widget BtnElevated(String label) {
     return ElevatedButton(
         child: Text(label),
         onPressed: () {
-          var validate = state.currentState.validate();
+          var validate = _formKey.currentState?.validate();
+          if (validate! && !_isLoading) {
+            handleSubmit();
+          }
         });
   }
 
@@ -100,5 +107,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void handleSubmit() {
+    _formKey.currentState?.save();
+    setState(() {
+      _isLoading = true;
+    });
+    LoginBloc.login(
+            email: _emailController.text, password: _passwordController.text)
+        .then((res) async {
+      await UserInfo().setToken(res.token);
+      await UserInfo().setUserId(res.userId);
+
+      Navigator.pushReplacement(
+          context, new MaterialPageRoute(builder: (context) => ProdukPage()));
+    }, onError: (error) {
+      print(error);
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => WarningDialog(
+              msg: "Login gagal, silahkan coba lagi",
+              handleClick: () => Navigator.pop(context)));
+    });
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

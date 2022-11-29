@@ -60,6 +60,7 @@ class WarningDialog extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      handleClick();
                     },
                     child: Text("Ok"))),
           ],

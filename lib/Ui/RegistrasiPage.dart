@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:kelompok_4/Bloc/RegistrasiBloc.dart';
+import 'package:kelompok_4/Components/SuccessDialog.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -108,7 +110,29 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Text(label),
       onPressed: () {
         var validate = _formKey.currentState?.validate();
+        if (validate! && !_isLoading) {
+          handleSubmit();
+        }
       },
     );
+  }
+
+  void handleSubmit() {
+    _formKey.currentState?.save();
+    setState(() {
+      _isLoading = true;
+    });
+    RegistrasiBloc.registrasi(
+            nama: _namaController.text,
+            email: _emailController.text,
+            password: _passwordController.text)
+        .then((res) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => SuccessDialog(
+              msg: "Registrasi berhasil, silahkan login",
+              handleClick: () => Navigator.pop(context)));
+    });
   }
 }
