@@ -32,7 +32,9 @@ class _ProdukFormCreateState extends State<ProdukFormCreate> {
                     "Kode produk harus diisi"),
                 TextFormInput("Nama Produk", _namaProdukController,
                     "Nama produk harus diisi"),
-                BtnValidated()
+                Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: BtnValidated())
               ],
             ),
           ),

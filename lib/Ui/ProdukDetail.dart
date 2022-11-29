@@ -21,22 +21,35 @@ class _ProdukDetailState extends State<ProdukDetail> {
       appBar: AppBar(
         title: Text("Detail Produk"),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(12),
         child: Column(children: [
-          Text(
-            "Kode : ${widget.produk.kodeProduk}",
-            style: TextStyle(fontSize: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "${widget.produk.kodeProduk}",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black54,
+              ),
+            ),
           ),
-          Text(
-            "Nama : ${widget.produk.namaProduk}",
-            style: TextStyle(fontSize: 18),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "${widget.produk.namaProduk}",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
           ),
-          Text(
-            "Harga : Rp. ${widget.produk.harga}",
-            style: TextStyle(fontSize: 18),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Rp. ${widget.produk.harga}",
+              style: TextStyle(fontSize: 18),
+            ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+            padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: BtnAction(),
           )
         ]),
@@ -48,24 +61,30 @@ class _ProdukDetailState extends State<ProdukDetail> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ElevatedButton(
-          child: Text("Edit"),
-          style: ElevatedButton.styleFrom(primary: Colors.blue),
-          onPressed: () {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) =>
-                        ProdukFormEdit(produk: widget.produk)));
-          },
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+            child: Text("Edit"),
+            style: ElevatedButton.styleFrom(primary: Colors.teal),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) =>
+                          ProdukFormEdit(produk: widget.produk)));
+            },
+          ),
         ),
         SizedBox(
           width: 12,
         ),
-        ElevatedButton(
-            child: Text("Delete"),
-            style: ElevatedButton.styleFrom(primary: Colors.red),
-            onPressed: () => confirmHapus()),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+              child: Text("Delete"),
+              style: ElevatedButton.styleFrom(primary: Colors.red),
+              onPressed: () => confirmHapus()),
+        )
       ],
     );
   }

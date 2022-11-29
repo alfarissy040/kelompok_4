@@ -51,7 +51,9 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
                     "Kode produk harus diisi"),
                 TextFormInput("Nama Produk", _namaProdukController,
                     "Nama produk harus diisi"),
-                BtnValidated()
+                Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: BtnValidated())
               ],
             ),
           ),
