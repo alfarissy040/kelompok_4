@@ -14,8 +14,8 @@ class LoginBloc {
       "password": password,
     };
 
-    var response = await Api().post(apiUrl, body);
-    var jsonObj = json.decode(response.body);
-    return Login.fromJson(jsonObj);
+    var response =
+        await Api().post(apiUrl, body).then((res) => json.decode(res.body));
+    return Login.fromJson(response);
   }
 }

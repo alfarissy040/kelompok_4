@@ -32,15 +32,22 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextForm("Nama", _namaController),
+                  TextForm(
+                      "Nama",
+                      _namaController,
+                      TextInputType.text,
+                      (value) => (value!.isEmpty && value.length < 3
+                          ? "Nama harus diisi minimal 3 karakter"
+                          : null),
+                      Icon(Icons.account_circle)),
                   EmailForm("Email", _emailController),
                   PasswordForm("Password", _passwordController),
                   PasswordValidationForm(
                       "Konfirmasi Password", _passwordController),
-                  Padding(
-                    padding: EdgeInsets.all(12),
-                    child: BtnElevated("Registrasi"),
-                  )
+                  SizedBox(
+                    width: 12,
+                  ),
+                  BtnElevated("Registrasi"),
                 ],
               ),
             ),
@@ -50,14 +57,12 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget TextForm(String label, controller) {
+  Widget TextForm(String label, controller, type, validator, [icon]) {
     return TextFormField(
-        decoration: InputDecoration(labelText: label),
-        keyboardType: TextInputType.text,
+        decoration: InputDecoration(labelText: label, prefixIcon: icon),
+        keyboardType: type,
         controller: controller,
-        validator: (value) => (value!.isEmpty && value.length < 3
-            ? "Nama harus diisi minimal 3 karakter"
-            : null));
+        validator: validator);
   }
 
   Widget EmailForm(String label, controller) {

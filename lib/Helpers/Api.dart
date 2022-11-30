@@ -5,11 +5,12 @@ import 'package:kelompok_4/Helpers/UserInfo.dart';
 import "package:http/http.dart" as http;
 
 class Api {
-  Future<dynamic> post(String url, dynamic data) async {
+  Future<dynamic> post(String link, dynamic data) async {
     var token = await UserInfo().getToken();
     var responseJson;
     try {
-      final response = await http.post(Uri.parse(url),
+      var url = Uri.parse(link);
+      final response = await http.post(url,
           body: data,
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
       responseJson = ReturnResponse(response);

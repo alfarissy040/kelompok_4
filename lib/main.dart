@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
 
   void isLogin() async {
     var token = await UserInfo().getToken();
-    if (token!.isNotEmpty) {
+    if (token != null) {
       setState(() {
         page = ProdukPage();
       });
@@ -36,6 +36,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Toko Kita",

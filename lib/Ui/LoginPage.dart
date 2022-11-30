@@ -55,8 +55,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget EmailForm(String label, controller) {
     return TextFormField(
         decoration: InputDecoration(
-          labelText: label,
-        ),
+            labelText: label,
+            prefixIcon: Icon(
+              Icons.email_outlined,
+              color: Colors.black54,
+            )),
         keyboardType: TextInputType.text,
         controller: controller,
         validator: (value) {
@@ -75,7 +78,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget PasswordForm(String label, controller) {
     return TextFormField(
-        decoration: InputDecoration(labelText: label),
+        decoration: InputDecoration(
+            labelText: label,
+            prefixIcon: Icon(Icons.key),
+            iconColor: Colors.black54),
         keyboardType: TextInputType.text,
         obscureText: true,
         controller: controller,
@@ -128,8 +134,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) => WarningDialog(
-              msg: "Login gagal, silahkan coba lagi",
-              handleClick: () => Navigator.pop(context)));
+              msg: "Login gagal, silahkan coba lagi", handleClick: () {}));
     });
     setState(() {
       _isLoading = false;
