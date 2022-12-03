@@ -10,7 +10,25 @@ class Api {
     var responseJson;
     try {
       var url = Uri.parse(link);
-      final response = await http.post(url,
+      final response = await http.post(
+        url,
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+        body: data,
+      );
+      print(response);
+      responseJson = ReturnResponse(response);
+    } on SocketException {
+      throw FetchDataException("No Internet connection");
+    }
+    return responseJson;
+  }
+
+  Future<dynamic> put(String link, dynamic data) async {
+    var token = await UserInfo().getToken();
+    var responseJson;
+    try {
+      var url = Uri.parse(link);
+      final response = await http.put(url,
           body: data,
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
       responseJson = ReturnResponse(response);

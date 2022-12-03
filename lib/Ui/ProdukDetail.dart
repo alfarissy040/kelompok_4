@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:kelompok_4/Bloc/ProdukBloc.dart';
+import 'package:kelompok_4/Components/WarningDialog.dart';
 import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
 import 'package:kelompok_4/Ui/ProdukFormEdit.dart';
+import 'package:kelompok_4/Ui/ProdukPage.dart';
 
 import '../Model/Produk.dart';
 
 class ProdukDetail extends StatefulWidget {
-  Produk produk;
-  ProdukDetail({required this.produk});
+  int id;
+  ProdukDetail({required this.id});
 
   @override
   State<ProdukDetail> createState() => _ProdukDetailState();
 }
 
 class _ProdukDetailState extends State<ProdukDetail> {
+  Map<String, dynamic> data = {};
+  _ProdukDetailState() {
+    data = ProdukBloc.showProduk(widget.id);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +32,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "${widget.produk.kodeProduk}",
+              "",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black54,
@@ -37,14 +42,14 @@ class _ProdukDetailState extends State<ProdukDetail> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "${widget.produk.namaProduk}",
+              "",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
           ),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Rp. ${widget.produk.harga}",
+              "Rp. ",
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -70,8 +75,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
               Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) =>
-                          ProdukFormEdit(produk: widget.produk)));
+                      builder: (context) => ProdukFormEdit(id: widget.id)));
             },
           ),
         ),
@@ -88,21 +92,31 @@ class _ProdukDetailState extends State<ProdukDetail> {
       ],
     );
   }
-}
 
-void confirmHapus() {
-  AlertDialog alertDialog = new AlertDialog(
-    content: Text("Yakin ingin menghapus data ini?"),
-    actions: [
-      Container(
-        color: Colors.blue,
-        child: ElevatedButton(child: Text("Ya"), onPressed: () {}),
-      ),
-      Container(
-        margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
-        color: Colors.red,
-        child: ElevatedButton(child: Text("Tidak"), onPressed: () {}),
-      ),
-    ],
-  );
+  void confirmHapus() {
+    AlertDialog alertDialog = AlertDialog(
+      content: Text("Yakin ingin menghapus data ini?"),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            ProdukBloc.deleteProduk(widget.id).then((value) {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => ProdukPage()));
+            }, onError: (error) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => WarningDialog(
+                      msg: "Gagal menghapus data", handleClick: () {}));
+            });
+          },
+          child: Text("Ya"),
+          style: ElevatedButton.styleFrom(primary: Colors.teal),
+        ),
+        ElevatedButton(
+            child: Text("Tidak"),
+            style: ElevatedButton.styleFrom(primary: Colors.red),
+            onPressed: () => Navigator.pop(context)),
+      ],
+    );
+  }
 }

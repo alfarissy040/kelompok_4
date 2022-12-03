@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/LogoutBloc.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
 import 'package:kelompok_4/Ui/LoginPage.dart';
 import 'package:kelompok_4/Ui/ProdukDetail.dart';
 import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../Model/Produk.dart';
 
@@ -13,6 +16,19 @@ class ProdukPage extends StatefulWidget {
 }
 
 class _ProdukPageState extends State<ProdukPage> {
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: true);
+  List data = [];
+  Map test = {};
+
+  refresh() {
+    Map hasil;
+    hasil = ProdukBloc.getProdukAll();
+    print(hasil);
+    log("getProduk : ${hasil}");
+    data.addAll(hasil["data"]["data"]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,57 +67,37 @@ class _ProdukPageState extends State<ProdukPage> {
           ],
         ),
       ),
-      body: FutureBuilder<List>(
-        future: ProdukBloc.getProduk(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print(snapshot.error);
-          }
-          if (snapshot.hasData) {
-            return ListProduk(list: snapshot.data);
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
-  }
-}
-
-class ItemProduk extends StatelessWidget {
-  final Produk produk;
-  ItemProduk({required this.produk});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => ProdukDetail(produk: produk)));
-        },
-        child: Card(
-          child: ListTile(
-            title: Text(produk.namaProduk),
-            subtitle: Text(produk.harga.toString()),
-          ),
+      body: SmartRefresher(
+        onRefresh: refresh,
+        controller: _refreshController,
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text("nama produk"),
+              subtitle: Text("kode produk"),
+              trailing: Text("harga"),
+            )
+          ],
         ),
       ),
     );
   }
-}
 
-class ListProduk extends StatelessWidget {
-  final List list;
-  ListProduk({required this.list});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: list == null ? 0 : list.length,
-      itemBuilder: (context, i) => ItemProduk(produk: list[i]),
+  Widget ItemProduk(Map items) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => ProdukDetail(
+                      id: items["id"],
+                    )));
+      },
+      child: ListTile(
+        title: Text(items["namaProduk"]),
+        subtitle: Text(items["kodeProduk"]),
+        trailing: Text(items["harga"]),
+      ),
     );
   }
 }

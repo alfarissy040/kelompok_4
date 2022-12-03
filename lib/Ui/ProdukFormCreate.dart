@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kelompok_4/Bloc/ProdukBloc.dart';
 import 'package:kelompok_4/Model/Produk.dart';
+import 'package:kelompok_4/Ui/ProdukPage.dart';
 
 class ProdukFormCreate extends StatefulWidget {
   @override
@@ -32,9 +34,11 @@ class _ProdukFormCreateState extends State<ProdukFormCreate> {
                     "Kode produk harus diisi"),
                 TextFormInput("Nama Produk", _namaProdukController,
                     "Nama produk harus diisi"),
+                NumberFormInput(
+                    "Harga", _hargaProdukController, "Nama produk harus diisi"),
                 Padding(
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: BtnValidated())
+                    child: BtnSubmit())
               ],
             ),
           ),
@@ -61,12 +65,30 @@ class _ProdukFormCreateState extends State<ProdukFormCreate> {
     );
   }
 
-  Widget BtnValidated() {
+  Widget BtnSubmit() {
     return ElevatedButton(
       child: Text(btnSubmit),
       onPressed: () {
         var validate = _formKey.currentState?.validate();
+        if (validate!) {
+          if (!_isLoading) handleSubmit();
+        }
       },
     );
+  }
+
+  handleSubmit() {
+    setState(() {
+      _isLoading = true;
+    });
+    Produk createProduk = new Produk(
+        kodeProduk: _kodeProdukController.text,
+        namaProduk: _namaProdukController.text,
+        harga: int.parse(_hargaProdukController.text));
+
+    ProdukBloc.createProduk(createProduk).then((value) {
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => ProdukPage()));
+    });
   }
 }

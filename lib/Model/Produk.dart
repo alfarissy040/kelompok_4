@@ -1,19 +1,23 @@
 class Produk {
-  int id, harga;
-  String kodeProduk, namaProduk;
+  int? id;
+  int harga;
+  String kodeProduk;
+  String namaProduk;
 
   Produk(
-      {required this.id,
+      {this.id,
       required this.kodeProduk,
       required this.namaProduk,
       required this.harga});
 
   factory Produk.fromJson(Map<String, dynamic> obj) {
-    return Produk(
+    var data = Produk(
       id: obj["id"],
       kodeProduk: obj["kode_produk"],
       namaProduk: obj["nama_produk"],
       harga: obj["harga"],
     );
+    print(data);
+    return data;
   }
 }

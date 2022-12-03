@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
     RegistrasiBloc.registrasi(
-            nama: _namaController.text,
+            name: _namaController.text,
             email: _emailController.text,
             password: _passwordController.text)
         .then((res) {

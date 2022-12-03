@@ -6,6 +6,7 @@ class Registrasi {
   Registrasi({required this.code, required this.status, required this.data});
 
   factory Registrasi.fromJson(Map<String, dynamic> obj) {
+    print("Registrasi Json: ${obj}");
     return Registrasi(
         code: obj["code"], status: obj["status"], data: obj["data"]);
   }

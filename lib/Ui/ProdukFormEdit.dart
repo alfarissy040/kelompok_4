@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:kelompok_4/Bloc/ProdukBloc.dart';
 import 'package:kelompok_4/Model/Produk.dart';
+import 'package:kelompok_4/Ui/ProdukPage.dart';
 
 class ProdukFormEdit extends StatefulWidget {
-  Produk produk;
-  ProdukFormEdit({required this.produk});
+  int id;
+  ProdukFormEdit({required this.id});
 
   @override
   State<ProdukFormEdit> createState() => _ProdukFormEditState();
 }
 
 class _ProdukFormEditState extends State<ProdukFormEdit> {
+  Map data = {};
+
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String judul = "Ubah Produk";
@@ -22,17 +26,12 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
   @override
   void initState() {
     super.initState();
+    data = ProdukBloc.showProduk(widget.id);
     setState(() {
-      judul = "Ubah Produk";
-      btnSubmit = "Edit";
-      _kodeProdukController.text = widget.produk.kodeProduk;
-      _namaProdukController.text = widget.produk.namaProduk;
-      _hargaProdukController.text = widget.produk.harga.toString();
+      _kodeProdukController.text = data["kode_produk"];
+      _namaProdukController.text = data["nama_produk"];
+      _hargaProdukController.text = data["harga"].toString();
     });
-  }
-
-  isUpdate() {
-    if (widget.produk != null) {}
   }
 
   @override
@@ -53,7 +52,7 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
                     "Nama produk harus diisi"),
                 Padding(
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: BtnValidated())
+                    child: BtnSubmit())
               ],
             ),
           ),
@@ -80,12 +79,31 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
     );
   }
 
-  Widget BtnValidated() {
+  Widget BtnSubmit() {
     return ElevatedButton(
       child: Text(btnSubmit),
       onPressed: () {
         var validate = _formKey.currentState?.validate();
+        if (validate! && !_isLoading) {
+          handleEdit();
+        }
       },
     );
+  }
+
+  handleEdit() {
+    setState(() {
+      _isLoading = true;
+    });
+    Produk createProduk = new Produk(
+        id: widget.id,
+        kodeProduk: _kodeProdukController.text,
+        namaProduk: _namaProdukController.text,
+        harga: int.parse(_hargaProdukController.text));
+
+    ProdukBloc.updateProduk(createProduk).then((value) {
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => ProdukPage()));
+    });
   }
 }

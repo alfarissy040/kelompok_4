@@ -6,19 +6,21 @@ import 'package:kelompok_4/Model/Registrasi.dart';
 
 class RegistrasiBloc {
   static Future<Registrasi> registrasi(
-      {required String nama,
+      {required String name,
       required String email,
       required String password}) async {
     String apiUrl = ApiUrl.registrasi;
 
-    var body = json.encode({
-      "nama": nama,
+    var data = {
+      "name": name,
       "email": email,
       "password": password,
-    });
+    };
 
     var response =
-        await Api().post(apiUrl, body).then((res) => json.decode(res.body));
+        await Api().post(apiUrl, data).then((res) => json.decode(res.body));
+
+    print(response);
     return Registrasi.fromJson(response);
   }
 }
