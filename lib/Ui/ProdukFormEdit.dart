@@ -12,8 +12,6 @@ class ProdukFormEdit extends StatefulWidget {
 }
 
 class _ProdukFormEditState extends State<ProdukFormEdit> {
-  Map data = {};
-
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String judul = "Ubah Produk";
@@ -26,13 +24,17 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
   @override
   void initState() {
     super.initState();
-    data = ProdukBloc.showProduk(widget.id);
-    setState(() {
-      _kodeProdukController.text = data["kode_produk"];
-      _namaProdukController.text = data["nama_produk"];
-      _hargaProdukController.text = data["harga"].toString();
-    });
+    getData();
   }
+
+  void getData() async {
+    var response = await ProdukBloc.showProduk(widget.id);
+
+    setState(() {
+      _kodeProdukController.text = response["kode_produk"];
+      _namaProdukController.text = response["nama_produk"];
+      _hargaProdukController.text = response["harga"].toString();
+    });  }
 
   @override
   Widget build(BuildContext context) {

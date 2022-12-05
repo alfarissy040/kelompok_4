@@ -1,25 +1,32 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:kelompok_4/Helpers/Api.dart';
 import 'package:kelompok_4/Helpers/ApiUrl.dart';
 import 'package:kelompok_4/Model/Produk.dart';
 
 class ProdukBloc {
-  static getProdukAll() async {
-    String apiUrl = ApiUrl.listProduk;
-    var response = await Api().get(apiUrl).then((res) => json.decode(res.body));
-    print("produk: ${response}");
+  static getProdukAll([int page = 1]) {
+    String apiUrl = "${ApiUrl.listProduk}/?page=${page}";
+
+    var response = Api()
+        .get(apiUrl)
+        .then((res) => json.decode(res.body))
+        .then((val) => val["data"]["data"]);
     return response;
   }
 
-  static showProduk(int id) async {
+  static showProduk(int id) {
+    // Map<String, dynamic> data = {};
     String apiUrl = "${ApiUrl.listProduk}/${id}";
-    var response = await Api().get(apiUrl).then((res) => json.decode(res.body));
-    return response["data"];
+
+    var response = Api()
+        .get(apiUrl)
+        .then((res) => json.decode(res.body))
+        .then((item) => item["data"]);
+    return response;
   }
 
-  static createProduk(Produk data) async {
+  static createProduk(Map<String, Object> data) async {
     String apiUrl = ApiUrl.createProduk;
     var response =
         await Api().post(apiUrl, data).then((res) => json.decode(res.body));

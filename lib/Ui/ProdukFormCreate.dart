@@ -81,12 +81,13 @@ class _ProdukFormCreateState extends State<ProdukFormCreate> {
     setState(() {
       _isLoading = true;
     });
-    Produk createProduk = new Produk(
-        kodeProduk: _kodeProdukController.text,
-        namaProduk: _namaProdukController.text,
-        harga: int.parse(_hargaProdukController.text));
+    Map<String, Object> data = {
+      "kode_produk": _kodeProdukController.text,
+      "nama_produk": _namaProdukController.text,
+      "harga": int.parse(_hargaProdukController.text),
+    };
 
-    ProdukBloc.createProduk(createProduk).then((value) {
+    ProdukBloc.createProduk(data).then((value) {
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => ProdukPage()));
     });

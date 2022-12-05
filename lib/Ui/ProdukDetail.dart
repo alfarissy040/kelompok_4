@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
 import 'package:kelompok_4/Components/WarningDialog.dart';
-import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
 import 'package:kelompok_4/Ui/ProdukFormEdit.dart';
 import 'package:kelompok_4/Ui/ProdukPage.dart';
 
-import '../Model/Produk.dart';
-
 class ProdukDetail extends StatefulWidget {
-  int id;
-  ProdukDetail({required this.id});
+  int id, harga;
+  String kodeProduk, namaProduk;
+
+  ProdukDetail(
+      {required this.id,
+      required this.kodeProduk,
+      required this.namaProduk,
+      required this.harga});
+
+  // Produk produk;
+  // ProdukDetail({required this.produk});
 
   @override
   State<ProdukDetail> createState() => _ProdukDetailState();
 }
 
 class _ProdukDetailState extends State<ProdukDetail> {
-  Map<String, dynamic> data = {};
-  _ProdukDetailState() {
-    data = ProdukBloc.showProduk(widget.id);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class _ProdukDetailState extends State<ProdukDetail> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "",
+              widget.kodeProduk,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.black54,
@@ -42,14 +44,14 @@ class _ProdukDetailState extends State<ProdukDetail> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "",
+              widget.namaProduk,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
           ),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Rp. ",
+              "Rp. ${widget.harga.toString()}",
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -118,5 +120,6 @@ class _ProdukDetailState extends State<ProdukDetail> {
             onPressed: () => Navigator.pop(context)),
       ],
     );
+    showDialog(context: context, builder: ((context) => alertDialog));
   }
 }

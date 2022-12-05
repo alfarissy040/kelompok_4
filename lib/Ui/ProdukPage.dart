@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/LogoutBloc.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
@@ -7,8 +6,6 @@ import 'package:kelompok_4/Ui/LoginPage.dart';
 import 'package:kelompok_4/Ui/ProdukDetail.dart';
 import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import '../Model/Produk.dart';
 
 class ProdukPage extends StatefulWidget {
   @override
@@ -18,15 +15,29 @@ class ProdukPage extends StatefulWidget {
 class _ProdukPageState extends State<ProdukPage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: true);
+  ScrollController lazzyController = ScrollController();
+  int page = 1;
   List data = [];
-  Map test = {};
 
-  refresh() {
-    Map hasil;
-    hasil = ProdukBloc.getProdukAll();
-    print(hasil);
-    log("getProduk : ${hasil}");
-    data.addAll(hasil["data"]["data"]);
+  refresh() async {
+    var response = await ProdukBloc.getProdukAll(page);
+    data.addAll(response);
+
+    _refreshController.loadComplete();
+    _refreshController.refreshCompleted();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lazzyController = ScrollController()..addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    lazzyController.removeListener(_scrollListener);
+    super.dispose();
   }
 
   @override
@@ -34,20 +45,16 @@ class _ProdukPageState extends State<ProdukPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Produk"),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: GestureDetector(
-              child: const Icon(Icons.add, size: 26),
-              onTap: () async {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProdukFormCreate()));
-              },
-            ),
-          ),
-        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ProdukFormCreate()));
+        },
+        child: Icon(
+          Icons.add,
+          size: 24,
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -69,16 +76,20 @@ class _ProdukPageState extends State<ProdukPage> {
       ),
       body: SmartRefresher(
         onRefresh: refresh,
+        enablePullDown: true,
         controller: _refreshController,
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text("nama produk"),
-              subtitle: Text("kode produk"),
-              trailing: Text("harga"),
-            )
-          ],
-        ),
+        child: ListView.builder(
+            controller: lazzyController,
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              if (index == data.length) {
+                return CupertinoActivityIndicator();
+              }
+              // return ListTile(
+              //   title: Text(index.toString()),
+              // );
+              return ItemProduk(data[index]);
+            }),
       ),
     );
   }
@@ -91,13 +102,26 @@ class _ProdukPageState extends State<ProdukPage> {
             new MaterialPageRoute(
                 builder: (context) => ProdukDetail(
                       id: items["id"],
+                      kodeProduk: items["kode_produk"],
+                      namaProduk: items["nama_produk"],
+                      harga: items["harga"],
                     )));
       },
       child: ListTile(
-        title: Text(items["namaProduk"]),
-        subtitle: Text(items["kodeProduk"]),
-        trailing: Text(items["harga"]),
+        title: Text(items["nama_produk"]),
+        subtitle: Text(items["kode_produk"]),
+        // trailing: Text(index.toString()),
+        trailing: Text(items["harga"].toString()),
       ),
     );
+  }
+
+  void _scrollListener() {
+    if (lazzyController.position.extentAfter < 500) {
+      setState(() {
+        page += 1;
+      });
+      refresh();
+    }
   }
 }
