@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kelompok_4/Helpers/UserInfo.dart';
-import 'package:kelompok_4/Ui/LoginPage.dart';
-import 'package:kelompok_4/Ui/ProdukPage.dart';
+import './Helpers/UserInfo.dart';
+import './Ui/LoginPage.dart';
+import './Ui/ProdukPage.dart';
 
 void main() {
   runApp(const MyApp());

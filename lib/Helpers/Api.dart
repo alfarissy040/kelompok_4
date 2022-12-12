@@ -68,7 +68,11 @@ class Api {
 
   dynamic ReturnResponse(http.Response response) {
     switch (response.statusCode) {
-      case 200 | 201 | 202:
+      case 200:
+        return response;
+      case 201:
+        return response;
+      case 202:
         return response;
       case 202:
         return response;
