@@ -19,8 +19,6 @@ class RegistrasiBloc {
 
     var response =
         await Api().post(apiUrl, data).then((res) => json.decode(res.body));
-
-    print(response);
     return Registrasi.fromJson(response);
   }
 }

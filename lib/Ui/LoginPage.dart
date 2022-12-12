@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/LoginBloc.dart';
 import 'package:kelompok_4/Components/WarningDialog.dart';
 import 'package:kelompok_4/Helpers/UserInfo.dart';
+import 'package:kelompok_4/Ui/Development/SettingsIp.dart';
 import 'package:kelompok_4/Ui/ProdukPage.dart';
 import 'package:kelompok_4/Ui/RegistrasiPage.dart';
 
@@ -22,7 +23,19 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(
+        title: Text("Login"),
+        // debuggind purpose
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => SettingsIp()));
+              },
+              icon: const Icon(Icons.settings)),
+        ],
+        // end debuging purpose
+      ),
       body: SingleChildScrollView(
         child: Container(
           child: Padding(
@@ -85,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         controller: controller,
-        validator: (value) => (value!.isEmpty && value.length < 6
+        validator: (value) => (value!.isEmpty & (value.length < 6)
             ? "Password harus diisi minimal 6 karakter"
             : null));
   }
@@ -95,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(label),
         onPressed: () {
           var validate = _formKey.currentState?.validate();
-          if (validate! && !_isLoading) {
+          if (validate! & !_isLoading) {
             handleSubmit();
           }
         });

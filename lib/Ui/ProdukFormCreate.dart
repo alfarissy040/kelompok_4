@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
+import 'package:kelompok_4/Components/SuccessDialog.dart';
+import 'package:kelompok_4/Components/WarningDialog.dart';
 import 'package:kelompok_4/Model/Produk.dart';
 import 'package:kelompok_4/Ui/ProdukPage.dart';
 
@@ -87,9 +89,25 @@ class _ProdukFormCreateState extends State<ProdukFormCreate> {
       "harga": int.parse(_hargaProdukController.text),
     };
 
-    ProdukBloc.createProduk(data).then((value) {
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => ProdukPage()));
+    ProdukBloc.createProduk(data).then((val) {
+      if (!val) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) =>
+                WarningDialog(msg: "gagal membuat data", handleClick: () {}));
+        return;
+      }
+      setState(() {
+        _isLoading = false;
+      });
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => SuccessDialog(
+              msg: "Berhasil membuat data",
+              handleClick: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => ProdukPage()))));
     });
   }
 }

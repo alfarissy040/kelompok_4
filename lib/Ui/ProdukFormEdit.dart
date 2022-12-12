@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
+import 'package:kelompok_4/Components/SuccessDialog.dart';
+import 'package:kelompok_4/Components/WarningDialog.dart';
 import 'package:kelompok_4/Model/Produk.dart';
 import 'package:kelompok_4/Ui/ProdukPage.dart';
 
@@ -27,14 +29,15 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
     getData();
   }
 
-  void getData() async {
-    var response = await ProdukBloc.showProduk(widget.id);
-
-    setState(() {
-      _kodeProdukController.text = response["kode_produk"];
-      _namaProdukController.text = response["nama_produk"];
-      _hargaProdukController.text = response["harga"].toString();
-    });  }
+  void getData() {
+    ProdukBloc.showProduk(widget.id.toString()).then((res) {
+      setState(() {
+        _kodeProdukController.text = res["kode_produk"];
+        _namaProdukController.text = res["nama_produk"];
+        _hargaProdukController.text = res["harga"].toString();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,8 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
                     "Kode produk harus diisi"),
                 TextFormInput("Nama Produk", _namaProdukController,
                     "Nama produk harus diisi"),
+                NumberFormInput(
+                    "Harga", _hargaProdukController, "Nama produk harus diisi"),
                 Padding(
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
                     child: BtnSubmit())
@@ -97,15 +102,32 @@ class _ProdukFormEditState extends State<ProdukFormEdit> {
     setState(() {
       _isLoading = true;
     });
-    Produk createProduk = new Produk(
-        id: widget.id,
-        kodeProduk: _kodeProdukController.text,
-        namaProduk: _namaProdukController.text,
-        harga: int.parse(_hargaProdukController.text));
+    Map data = {
+      "kode_produk": _kodeProdukController.text,
+      "nama_produk": _namaProdukController.text,
+      "harga": int.parse(_hargaProdukController.text)
+    };
 
-    ProdukBloc.updateProduk(createProduk).then((value) {
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => ProdukPage()));
+    ProdukBloc.updateProduk(widget.id, data).then((val) {
+      if (!val) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) =>
+                WarningDialog(msg: "gagal mengubah data", handleClick: () {}));
+        return;
+      }
+      setState(() {
+        _isLoading = false;
+      });
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) => SuccessDialog(
+              msg: "Berhasil mengubah data",
+              handleClick: () => Navigator.of(context).push(
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => ProdukPage()))));
     });
   }
 }

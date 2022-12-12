@@ -5,8 +5,9 @@ import 'package:kelompok_4/Helpers/ApiUrl.dart';
 import 'package:kelompok_4/Model/Produk.dart';
 
 class ProdukBloc {
-  static getProdukAll([int page = 1]) {
-    String apiUrl = "${ApiUrl.listProduk}/?page=${page}";
+  static getProdukAll([int page = 1, String? sort]) {
+    String apiUrl =
+        "${ApiUrl.listProduk}/?page=${page}${sort!.isEmpty ? "&sort=${sort}" : ""}";
 
     var response = Api()
         .get(apiUrl)
@@ -15,7 +16,7 @@ class ProdukBloc {
     return response;
   }
 
-  static showProduk(int id) {
+  static showProduk(String id) {
     // Map<String, dynamic> data = {};
     String apiUrl = "${ApiUrl.listProduk}/${id}";
 
@@ -26,19 +27,24 @@ class ProdukBloc {
     return response;
   }
 
-  static createProduk(Map<String, Object> data) async {
+  static createProduk(Map items) async {
     String apiUrl = ApiUrl.createProduk;
+    var data = {
+      "kode_produk": items["kode_produk"],
+      "nama_produk": items["nama_produk"],
+      "harga": items["harga"].toString()
+    };
     var response =
         await Api().post(apiUrl, data).then((res) => json.decode(res.body));
     return response["status"];
   }
 
-  static updateProduk(Produk produk) async {
-    String apiUrl = "${ApiUrl.updateProduk}/${produk.id}";
+  static updateProduk(int id, Map items) async {
+    String apiUrl = ApiUrl.updateProduk(id);
     var data = {
-      "kode_produk": produk.kodeProduk,
-      "nama_produk": produk.namaProduk,
-      "harga": produk.harga,
+      "kode_produk": items["kode_produk"],
+      "nama_produk": items["nama_produk"],
+      "harga": items["harga"].toString()
     };
     var response =
         await Api().put(apiUrl, data).then((res) => json.decode(res.body));
@@ -46,7 +52,7 @@ class ProdukBloc {
   }
 
   static deleteProduk(int id) async {
-    String apiUrl = "${ApiUrl.updateProduk}/${id}";
+    String apiUrl = ApiUrl.updateProduk(id);
     var response =
         await Api().delete(apiUrl).then((res) => json.decode(res.body));
     return response["status"];

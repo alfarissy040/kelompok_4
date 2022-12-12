@@ -20,12 +20,23 @@ class _ProdukPageState extends State<ProdukPage> {
   List data = [];
 
   refresh() async {
-    var response = await ProdukBloc.getProdukAll(page);
-    data.addAll(response);
+    setState(() {
+      data = [];
+      page = 1;
+    });
+    await ProdukBloc.getProdukAll(1, "harga").then((items) => data = items);
 
     _refreshController.loadComplete();
     _refreshController.refreshCompleted();
     setState(() {});
+  }
+
+  updateList() async {
+    setState(() {
+      page += 1;
+    });
+    var response = await ProdukBloc.getProdukAll(page, "harga");
+    data.addAll(response);
   }
 
   @override
@@ -94,7 +105,7 @@ class _ProdukPageState extends State<ProdukPage> {
     );
   }
 
-  Widget ItemProduk(Map items) {
+  Widget ItemProduk(Map items, [int? index]) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -118,10 +129,7 @@ class _ProdukPageState extends State<ProdukPage> {
 
   void _scrollListener() {
     if (lazzyController.position.extentAfter < 500) {
-      setState(() {
-        page += 1;
-      });
-      refresh();
+      updateList();
     }
   }
 }

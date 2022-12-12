@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:kelompok_4/Bloc/RegistrasiBloc.dart';
 import 'package:kelompok_4/Components/SuccessDialog.dart';
+import 'package:kelompok_4/Components/WarningDialog.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -36,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       "Nama",
                       _namaController,
                       TextInputType.text,
-                      (value) => (value!.isEmpty && value.length < 3
+                      (value) => (value!.isEmpty & value.length < 3
                           ? "Nama harus diisi minimal 3 karakter"
                           : null),
                       Icon(Icons.account_circle)),
@@ -90,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         controller: controller,
-        validator: (value) => (value!.isEmpty && value.length < 6
+        validator: (value) => (value!.isEmpty & (value.length < 6)
             ? "Password harus diisi minimal 6 karakter"
             : null));
   }
@@ -101,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         validator: (value) {
-          if (value!.isEmpty && value.length < 6) {
+          if (value!.length < 6) {
             return "Password harus diisi minimal 6 karakter";
           }
           if (value != validator.text) {
@@ -115,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Text(label),
       onPressed: () {
         var validate = _formKey.currentState?.validate();
-        if (validate! && !_isLoading) {
+        if (validate! & !_isLoading) {
           handleSubmit();
         }
       },
@@ -138,6 +139,15 @@ class _RegisterPageState extends State<RegisterPage> {
           builder: (BuildContext context) => SuccessDialog(
               msg: "Registrasi berhasil, silahkan login",
               handleClick: () => Navigator.pop(context)));
+    }, onError: (error) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) =>
+              WarningDialog(msg: "Registrasi gagal", handleClick: () {}));
+    });
+    setState(() {
+      _isLoading = false;
     });
   }
 }

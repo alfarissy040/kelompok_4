@@ -28,9 +28,11 @@ class Api {
     var responseJson;
     try {
       var url = Uri.parse(link);
-      final response = await http.put(url,
-          body: data,
-          headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
+      final response = await http.put(
+        url,
+        headers: {HttpHeaders.authorizationHeader: "Bearer $token"},
+        body: data,
+      );
       responseJson = ReturnResponse(response);
     } on SocketException {
       throw FetchDataException("No Internet connection");
@@ -66,7 +68,9 @@ class Api {
 
   dynamic ReturnResponse(http.Response response) {
     switch (response.statusCode) {
-      case 200:
+      case 200 | 201 | 202:
+        return response;
+      case 202:
         return response;
       case 400:
         throw BadRequestException(response.body.toString());

@@ -25,4 +25,16 @@ class UserInfo {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.clear();
   }
+
+  // debugging purpose
+  Future setIp(String value) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.setString("ip", value);
+  }
+
+  Future getIp() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("ip");
+  }
+  // end debugging purpose
 }
