@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
         keyboardType: TextInputType.text,
         obscureText: true,
         controller: controller,
-        validator: (value) => (value!.isEmpty & (value.length < 6)
+        validator: (value) => (value!.isEmpty && (value.length < 6)
             ? "Password harus diisi minimal 6 karakter"
             : null));
   }

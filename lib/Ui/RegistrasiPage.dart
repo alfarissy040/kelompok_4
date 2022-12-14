@@ -37,7 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       "Nama",
                       _namaController,
                       TextInputType.text,
-                      (value) => (value!.isEmpty & value.length < 3
+                      (value) => (value!.isEmpty && (value.length < 3)
                           ? "Nama harus diisi minimal 3 karakter"
                           : null),
                       Icon(Icons.account_circle)),

@@ -13,7 +13,7 @@ class ApiUrl {
   //   print("ip : $ip");
   //   return ip[ip.length];
   // }
-  static const String baseUrl = "http://10.0.2.2:8081/toko-api/public";
+  static const String baseUrl = "http://192.168.0.178:8081/toko-api/public";
 
   static String registrasi = "$baseUrl/registrasi";
   static String login = "$baseUrl/login";
