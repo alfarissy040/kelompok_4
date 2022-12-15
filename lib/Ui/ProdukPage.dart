@@ -16,30 +16,20 @@ class _ProdukPageState extends State<ProdukPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
   ScrollController lazzyController = ScrollController();
-  int page = 1;
+  int limit = 25;
   List data = [];
   String ordeyRules = "kode_produk";
 
   refresh() async {
     setState(() {
       data = [];
-      page = 1;
     });
-    await ProdukBloc.getProdukAll(1).then((items) => data = items);
+    await ProdukBloc.getProdukAll().then((items) => data = items);
     orderBy(ordeyRules);
 
     _refreshController.loadComplete();
     _refreshController.refreshCompleted();
     setState(() {});
-  }
-
-  updateList() async {
-    setState(() {
-      page += 1;
-    });
-    var response = await ProdukBloc.getProdukAll(page);
-    data.addAll(response);
-    orderBy(ordeyRules);
   }
 
   orderBy(String rules) {
@@ -130,7 +120,7 @@ class _ProdukPageState extends State<ProdukPage> {
         controller: _refreshController,
         child: ListView.builder(
             controller: lazzyController,
-            itemCount: data.length,
+            itemCount: data.length > 0 ? limit : data.length,
             itemBuilder: (context, index) {
               if (index == data.length) {
                 return CupertinoActivityIndicator();
@@ -165,7 +155,13 @@ class _ProdukPageState extends State<ProdukPage> {
 
   void _scrollListener() {
     if (lazzyController.position.extentAfter < 500) {
-      updateList();
+      setState(() {
+        if ((limit + 25) >= data.length) {
+          limit = data.length;
+        } else {
+          limit += 25;
+        }
+      });
     }
   }
 }
