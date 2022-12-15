@@ -17,14 +17,14 @@ class _ProdukPageState extends State<ProdukPage> {
       RefreshController(initialRefresh: true);
   ScrollController lazzyController = ScrollController();
   int page = 1;
-  List data = [];
+  List<Map> data = [];
 
   refresh() async {
     setState(() {
       data = [];
       page = 1;
     });
-    await ProdukBloc.getProdukAll(1, "harga").then((items) => data = items);
+    await ProdukBloc.getProdukAll(1).then((items) => data = items);
 
     _refreshController.loadComplete();
     _refreshController.refreshCompleted();
@@ -35,9 +35,17 @@ class _ProdukPageState extends State<ProdukPage> {
     setState(() {
       page += 1;
     });
-    var response = await ProdukBloc.getProdukAll(page, "harga");
+    var response = await ProdukBloc.getProdukAll(page);
     data.addAll(response);
   }
+
+  // orderBy(String rules) {
+  //   data.sort((a, b) {
+  //     var sorted = a[rules].compareTo(b[rules]);
+  //     if (sorted != 0) return sorted;
+  //     return a[rules].compareTo(b[rules]);
+  //   });
+  // }
 
   @override
   void initState() {
@@ -56,6 +64,10 @@ class _ProdukPageState extends State<ProdukPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Produk"),
+        // actions: [
+        //   IconButton(
+        //       onPressed: () => orderBy("nama_produk"), icon: Icon(Icons.sort))
+        // ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -96,9 +108,6 @@ class _ProdukPageState extends State<ProdukPage> {
               if (index == data.length) {
                 return CupertinoActivityIndicator();
               }
-              // return ListTile(
-              //   title: Text(index.toString()),
-              // );
               return ItemProduk(data[index]);
             }),
       ),
