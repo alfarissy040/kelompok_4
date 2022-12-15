@@ -17,7 +17,7 @@ class _ProdukPageState extends State<ProdukPage> {
       RefreshController(initialRefresh: true);
   ScrollController lazzyController = ScrollController();
   int page = 1;
-  List<Map> data = [];
+  List data = [];
 
   refresh() async {
     setState(() {
@@ -40,11 +40,13 @@ class _ProdukPageState extends State<ProdukPage> {
   }
 
   orderBy(String rules) {
+    _refreshController.requestLoading();
     data.sort((a, b) {
       var sorted = a[rules].compareTo(b[rules]);
       if (sorted != 0) return sorted;
       return a[rules].compareTo(b[rules]);
     });
+    _refreshController.loadComplete();
   }
 
   @override

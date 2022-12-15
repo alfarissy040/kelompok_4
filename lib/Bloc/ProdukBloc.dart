@@ -7,7 +7,7 @@ import 'package:kelompok_4/Model/Produk.dart';
 class ProdukBloc {
   static getProdukAll([int page = 1, String? sort]) {
     String apiUrl =
-        "${ApiUrl.listProduk}/?page=${page}${sort!.isEmpty ? "&sort=${sort}" : ""}";
+        "${ApiUrl.listProduk}/?page=${page}${sort != null ? "&sort=${sort}" : ""}";
 
     var response = Api()
         .get(apiUrl)
