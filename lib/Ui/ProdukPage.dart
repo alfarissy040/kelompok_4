@@ -13,11 +13,12 @@ class ProdukPage extends StatefulWidget {
 }
 
 class _ProdukPageState extends State<ProdukPage> {
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: true);
   ScrollController lazzyController = ScrollController();
   int page = 1;
   List data = [];
+  String ordeyRules = "kode_produk";
 
   refresh() async {
     setState(() {
@@ -25,6 +26,7 @@ class _ProdukPageState extends State<ProdukPage> {
       page = 1;
     });
     await ProdukBloc.getProdukAll(1).then((items) => data = items);
+    orderBy(ordeyRules);
 
     _refreshController.loadComplete();
     _refreshController.refreshCompleted();
@@ -37,6 +39,7 @@ class _ProdukPageState extends State<ProdukPage> {
     });
     var response = await ProdukBloc.getProdukAll(page);
     data.addAll(response);
+    orderBy(ordeyRules);
   }
 
   orderBy(String rules) {
@@ -68,7 +71,29 @@ class _ProdukPageState extends State<ProdukPage> {
         title: const Text("List Produk"),
         actions: [
           IconButton(
-              onPressed: () => orderBy("nama_produk"), icon: Icon(Icons.sort))
+              onPressed: () {
+                setState(() {
+                  ordeyRules = "kode_produk";
+                });
+                orderBy(ordeyRules);
+              },
+              icon: const Icon(Icons.code)),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  ordeyRules = "nama_produk";
+                });
+                orderBy(ordeyRules);
+              },
+              icon: const Icon(Icons.sort_by_alpha)),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  ordeyRules = "harga";
+                });
+                orderBy(ordeyRules);
+              },
+              icon: const Icon(Icons.onetwothree)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
