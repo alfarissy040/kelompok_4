@@ -67,7 +67,7 @@ class _ProdukPageState extends State<ProdukPage> {
                 });
                 orderBy(ordeyRules);
               },
-              icon: const Icon(Icons.code)),
+              icon: const Icon(Icons.sort)),
           IconButton(
               onPressed: () {
                 setState(() {
@@ -83,7 +83,7 @@ class _ProdukPageState extends State<ProdukPage> {
                 });
                 orderBy(ordeyRules);
               },
-              icon: const Icon(Icons.onetwothree)),
+              icon: const Icon(Icons.attach_money)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
