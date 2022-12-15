@@ -39,13 +39,13 @@ class _ProdukPageState extends State<ProdukPage> {
     data.addAll(response);
   }
 
-  // orderBy(String rules) {
-  //   data.sort((a, b) {
-  //     var sorted = a[rules].compareTo(b[rules]);
-  //     if (sorted != 0) return sorted;
-  //     return a[rules].compareTo(b[rules]);
-  //   });
-  // }
+  orderBy(String rules) {
+    data.sort((a, b) {
+      var sorted = a[rules].compareTo(b[rules]);
+      if (sorted != 0) return sorted;
+      return a[rules].compareTo(b[rules]);
+    });
+  }
 
   @override
   void initState() {
@@ -64,10 +64,10 @@ class _ProdukPageState extends State<ProdukPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Produk"),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => orderBy("nama_produk"), icon: Icon(Icons.sort))
-        // ],
+        actions: [
+          IconButton(
+              onPressed: () => orderBy("nama_produk"), icon: Icon(Icons.sort))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
