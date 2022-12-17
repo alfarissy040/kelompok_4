@@ -21,25 +21,19 @@ class _ProdukPageState extends State<ProdukPage> {
   String ordeyRules = "kode_produk";
 
   refresh() async {
-    setState(() {
-      data = [];
-    });
     await ProdukBloc.getProdukAll().then((items) => data = items);
     orderBy(ordeyRules);
-
-    _refreshController.loadComplete();
-    _refreshController.refreshCompleted();
-    setState(() {});
   }
 
   orderBy(String rules) {
-    _refreshController.requestLoading();
     data.sort((a, b) {
       var sorted = a[rules].compareTo(b[rules]);
       if (sorted != 0) return sorted;
       return a[rules].compareTo(b[rules]);
     });
+    _refreshController.refreshCompleted();
     _refreshController.loadComplete();
+    setState(() {});
   }
 
   @override
@@ -136,7 +130,7 @@ class _ProdukPageState extends State<ProdukPage> {
       onTap: () {
         Navigator.push(
             context,
-            new MaterialPageRoute(
+            MaterialPageRoute(
                 builder: (context) => ProdukDetail(
                       id: items["id"],
                       kodeProduk: items["kode_produk"],
