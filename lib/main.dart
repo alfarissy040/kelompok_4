@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:kelompok_4/Bloc/ThemeManager.dart';
 import './Helpers/UserInfo.dart';
 import './Ui/LoginPage.dart';
 import './Ui/ProdukPage.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  return runApp(ChangeNotifierProvider<ThemeManager>(
+    create: (_) => ThemeManager(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -38,10 +44,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Toko Kita",
-      debugShowCheckedModeBanner: false,
-      home: page,
-    );
+    return Consumer<ThemeManager>(
+        builder: (context, theme, child) => MaterialApp(
+              theme: theme.getTheme(),
+              title: "Toko Kita",
+              debugShowCheckedModeBanner: false,
+              home: page,
+            ));
   }
 }

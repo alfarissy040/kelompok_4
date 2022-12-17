@@ -2,15 +2,15 @@ import 'dart:ffi';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Theme {
-  void setDark(bool theme) async {
+class ThemeInfo {
+  void setThemeInfo(String theme) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool("theme", theme);
+    pref.setString("theme", theme);
   }
 
-  getDark() async {
+  Future<String> getThemeInfo() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    bool? theme = pref.getBool("theme");
-    return theme! ? true : false;
+    String theme = pref.getString("theme").toString();
+    return theme;
   }
 }
