@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/LogoutBloc.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
+import 'package:kelompok_4/Components/ToggleButton.dart';
 import 'package:kelompok_4/Ui/LoginPage.dart';
 import 'package:kelompok_4/Ui/ProdukDetail.dart';
 import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
@@ -22,18 +23,44 @@ class _ProdukPageState extends State<ProdukPage> {
 
   refresh() async {
     await ProdukBloc.getProdukAll().then((items) => data = items);
-    orderBy(ordeyRules);
+    orderBy();
   }
 
-  orderBy(String rules) {
+  orderBy() {
     data.sort((a, b) {
-      var sorted = a[rules].compareTo(b[rules]);
+      var sorted = a[ordeyRules].compareTo(b[ordeyRules]);
       if (sorted != 0) return sorted;
-      return a[rules].compareTo(b[rules]);
+      return a[ordeyRules].compareTo(b[ordeyRules]);
     });
     _refreshController.refreshCompleted();
     _refreshController.loadComplete();
     setState(() {});
+  }
+
+  void handleSelectItem(int index) {
+    switch (index) {
+      case 0:
+        print("satu");
+        setState(() {
+          ordeyRules = "kode_produk";
+        });
+        orderBy();
+        return;
+      case 1:
+        setState(() {
+          ordeyRules = "nama_produk";
+        });
+        orderBy();
+        return;
+      case 2:
+        setState(() {
+          ordeyRules = "harga";
+        });
+        orderBy();
+        return;
+      default:
+        return;
+    }
   }
 
   @override
@@ -59,7 +86,7 @@ class _ProdukPageState extends State<ProdukPage> {
                 setState(() {
                   ordeyRules = "kode_produk";
                 });
-                orderBy(ordeyRules);
+                orderBy();
               },
               icon: const Icon(Icons.sort)),
           IconButton(
@@ -67,7 +94,7 @@ class _ProdukPageState extends State<ProdukPage> {
                 setState(() {
                   ordeyRules = "nama_produk";
                 });
-                orderBy(ordeyRules);
+                orderBy();
               },
               icon: const Icon(Icons.sort_by_alpha)),
           IconButton(
@@ -75,7 +102,7 @@ class _ProdukPageState extends State<ProdukPage> {
                 setState(() {
                   ordeyRules = "harga";
                 });
-                orderBy(ordeyRules);
+                orderBy();
               },
               icon: const Icon(Icons.attach_money)),
         ],
@@ -98,10 +125,8 @@ class _ProdukPageState extends State<ProdukPage> {
               trailing: const Icon(Icons.logout),
               onTap: () async {
                 await LogoutBloc.logout().then((res) => {
-                      Navigator.pushReplacement(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => LoginPage())),
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => LoginPage())),
                     });
               },
             )
@@ -112,15 +137,29 @@ class _ProdukPageState extends State<ProdukPage> {
         onRefresh: refresh,
         enablePullDown: true,
         controller: _refreshController,
-        child: ListView.builder(
-            controller: lazzyController,
-            itemCount: data.length > 0 ? limit : data.length,
-            itemBuilder: (context, index) {
-              if (index == data.length) {
-                return CupertinoActivityIndicator();
-              }
-              return ItemProduk(data[index]);
-            }),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 12,
+              ),
+              Center(
+                child: ToggleButton(handleSelectItem: handleSelectItem),
+              ),
+              ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  controller: lazzyController,
+                  itemCount: data.length > 0 ? limit : data.length,
+                  itemBuilder: (context, index) {
+                    if (index == data.length) {
+                      return CupertinoActivityIndicator();
+                    }
+                    return ItemProduk(data[index]);
+                  }),
+            ],
+          ),
+        ),
       ),
     );
   }
