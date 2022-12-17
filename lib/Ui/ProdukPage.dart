@@ -80,32 +80,6 @@ class _ProdukPageState extends State<ProdukPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Produk"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  ordeyRules = "kode_produk";
-                });
-                orderBy();
-              },
-              icon: const Icon(Icons.sort)),
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  ordeyRules = "nama_produk";
-                });
-                orderBy();
-              },
-              icon: const Icon(Icons.sort_by_alpha)),
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  ordeyRules = "harga";
-                });
-                orderBy();
-              },
-              icon: const Icon(Icons.attach_money)),
-        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
