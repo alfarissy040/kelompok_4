@@ -6,11 +6,8 @@ import './Ui/ProdukPage.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  // runApp(const MyApp());
-  return runApp(ChangeNotifierProvider<ThemeManager>(
-    create: (_) => ThemeManager(),
-    child: MyApp(),
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -44,12 +41,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeManager>(
-        builder: (context, theme, child) => MaterialApp(
-              theme: theme.getTheme(),
-              title: "Toko Kita",
-              debugShowCheckedModeBanner: false,
-              home: page,
-            ));
+    return ChangeNotifierProvider(
+      create: (context) => ThemeManager(),
+      builder: (context, child) {
+        final provider = Provider.of<ThemeManager>(context);
+        return MaterialApp(
+          theme: provider.lightTheme,
+          darkTheme: provider.darkTheme,
+          themeMode: provider.themeMode,
+          title: "Toko Kita",
+          debugShowCheckedModeBanner: false,
+          home: page,
+        );
+      },
+    );
   }
 }

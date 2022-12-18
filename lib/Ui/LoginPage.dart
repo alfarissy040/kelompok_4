@@ -5,6 +5,7 @@ import 'package:kelompok_4/Helpers/UserInfo.dart';
 import 'package:kelompok_4/Ui/Development/SettingsIp.dart';
 import 'package:kelompok_4/Ui/ProdukPage.dart';
 import 'package:kelompok_4/Ui/RegistrasiPage.dart';
+import 'package:kelompok_4/Ui/Settings/SettingPage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,9 +31,9 @@ class _LoginPageState extends State<LoginPage> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => SettingsIp()));
+                    MaterialPageRoute(builder: (context) => SettingPage()));
               },
-              icon: const Icon(Icons.settings)),
+              icon: const Icon(Icons.settings))
         ],
         // end debuging purpose
       ),
@@ -71,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
             labelText: label,
             prefixIcon: Icon(
               Icons.email_outlined,
-              color: Colors.black54,
             )),
         keyboardType: TextInputType.text,
         controller: controller,

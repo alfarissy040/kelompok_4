@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kelompok_4/Bloc/LogoutBloc.dart';
 import 'package:kelompok_4/Bloc/ProdukBloc.dart';
+import 'package:kelompok_4/Bloc/ThemeManager.dart';
 import 'package:kelompok_4/Components/ToggleButton.dart';
 import 'package:kelompok_4/Ui/LoginPage.dart';
 import 'package:kelompok_4/Ui/ProdukDetail.dart';
 import 'package:kelompok_4/Ui/ProdukFormCreate.dart';
+import 'package:kelompok_4/Ui/Settings/SettingPage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProdukPage extends StatefulWidget {
@@ -20,6 +22,18 @@ class _ProdukPageState extends State<ProdukPage> {
   int limit = 25;
   List data = [];
   String ordeyRules = "kode_produk";
+
+  @override
+  void initState() {
+    super.initState();
+    lazzyController = ScrollController()..addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    lazzyController.removeListener(_scrollListener);
+    super.dispose();
+  }
 
   refresh() async {
     await ProdukBloc.getProdukAll().then((items) => data = items);
@@ -64,24 +78,21 @@ class _ProdukPageState extends State<ProdukPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    lazzyController = ScrollController()..addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    lazzyController.removeListener(_scrollListener);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Produk"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingPage()));
+              },
+              icon: const Icon(Icons.settings))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.teal,
         onPressed: () async {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => ProdukFormCreate()));

@@ -8,9 +8,9 @@ class ThemeInfo {
     pref.setString("theme", theme);
   }
 
-  Future<String> getThemeInfo() async {
+  Future<String?> getThemeInfo() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    String theme = pref.getString("theme").toString();
+    String? theme = pref.getString("theme");
     return theme;
   }
 }

@@ -24,7 +24,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         children: toggleItems,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         selectedColor: Colors.white,
-        fillColor: Colors.blue,
+        fillColor: Colors.teal,
         constraints: const BoxConstraints(
           minHeight: 40.0,
           minWidth: 80.0,
